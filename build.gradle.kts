@@ -3,7 +3,7 @@ plugins {
     id("com.github.weave-mc.weave-gradle") version "649dba7468"
 }
 
-group = "com.example"
+group = "me.thayt"
 version = "1.0"
 
 minecraft.version("1.8.9")
@@ -17,8 +17,9 @@ dependencies {
     compileOnly("com.github.weave-mc:weave-loader:70bd82faa6")
 
     compileOnly("org.spongepowered:mixin:0.8.5")
+    implementation("com.mpatric:mp3agic:0.9.1")
 }
 
 tasks.compileJava {
-    options.release.set(11)
+    options.release.set(14)
 }

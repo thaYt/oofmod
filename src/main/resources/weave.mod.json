@@ -1,11 +1,7 @@
 {
-  "mixinConfigs": [
-    "examplemod.mixins.json"
-  ],
   "entrypoints": [
-    "com.example.mod.ExampleMod"
+    "me.thayt.oofmod.OofMod"
   ],
-  "hooks": [
-    "com.example.mod.hook.MinecraftHook"
-  ]
+  "hooks": [],
+  "mixinConfigs": []
 }

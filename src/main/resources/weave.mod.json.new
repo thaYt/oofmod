@@ -1,0 +1,14 @@
+{
+  "about": {
+    "author": "core#1011",
+    "description": "Oofmod port for Weave - custom kill/bed/death sounds",
+    "name": "oofmod",
+    "version": "0.1",
+    "website": "https://github.com/thaYt/oofmod"
+  },
+  "entrypoints": [
+    "me.thayt.oofmod.OofMod"
+  ],
+  "hooks": [],
+  "mixinConfigs": []
+}
