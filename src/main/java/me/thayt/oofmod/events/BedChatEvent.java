@@ -21,7 +21,7 @@ public class BedChatEvent extends Event {
         if (line.split(" ").length == 0) return;
         Matcher bedBreakMatcher = Chat.bedPattern.matcher(line);
         if (bedBreakMatcher.find() && Objects.equals(bedBreakMatcher.group("username"), Minecraft.getMinecraft().thePlayer.getName())) {
-            new Thread(() -> SoundManager.playSound(new File(OofMod.storageManager.getActiveSound()), OofMod.storageManager.getVolume()));
+            new Thread(() -> SoundManager.playSound(new File(OofMod.storageManager.getActiveSound()), OofMod.storageManager.getVolume())).start();
         }
     }
 }

@@ -22,7 +22,7 @@ public class KillChatEvent extends Event {
         Matcher killMessageMatcher = Chat.killPattern.matcher(line);
         Matcher bedBreakMatcher = Chat.bedPattern.matcher(line);
         if (killMessageMatcher.find() && !bedBreakMatcher.find() && Objects.equals(killMessageMatcher.group("killer"), Minecraft.getMinecraft().thePlayer.getName())) {
-            new Thread(() -> SoundManager.playSound(new File(OofMod.storageManager.getActiveSound()), OofMod.storageManager.getVolume()));
+            new Thread(() -> SoundManager.playSound(new File(OofMod.storageManager.getActiveSound()), OofMod.storageManager.getVolume())).start();
         }
     }
 }
