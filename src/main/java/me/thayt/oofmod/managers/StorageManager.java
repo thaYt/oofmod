@@ -69,14 +69,14 @@ public class StorageManager {
     }
 
     private Path getConfigFolder() {
-        File dir = Paths.get(System.getProperty("user.home"), ".lunarclient", "oofmod").toFile();
+        File dir = Paths.get(System.getProperty("user.home"), ".weave", "oofmod").toFile();
         if (dir.exists() && !dir.isDirectory()) dir.delete();
         if (!dir.exists()) dir.mkdirs();
         return dir.toPath();
     }
 
     public Path getSoundFolder() {
-        File dir = Paths.get(System.getProperty("user.home"), ".lunarclient", "oofmod", "sounds").toFile();
+        File dir = Paths.get(System.getProperty("user.home"), ".weave", "oofmod", "sounds").toFile();
         if (dir.exists() && !dir.isDirectory()) dir.delete();
         if (!dir.exists()) dir.mkdirs();
         return dir.toPath();
