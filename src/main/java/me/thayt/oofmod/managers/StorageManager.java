@@ -64,8 +64,8 @@ public class StorageManager {
 
     public Collection<File> getAllSounds() {
         File dir = getSoundFolder().toFile();
-//        return FileUtils.listFiles(dir, new String[]{"mp3", "wav"}, false);
-        return FileUtils.listFiles(dir, new String[]{"wav"}, false);
+        return FileUtils.listFiles(dir, new String[]{"mp3", "wav"}, false);
+//        return FileUtils.listFiles(dir, new String[]{"wav"}, false);
     }
 
     private Path getConfigFolder() {

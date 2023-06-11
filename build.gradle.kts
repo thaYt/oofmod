@@ -17,7 +17,8 @@ dependencies {
     compileOnly("com.github.weave-mc:weave-loader:70bd82faa6")
 
     compileOnly("org.spongepowered:mixin:0.8.5")
-    implementation("com.mpatric:mp3agic:0.9.1")
+//    implementation("com.mpatric:mp3agic:0.9.1")
+    implementation("com.sipgate:mp3-wav:1.0.3")
 }
 
 tasks.compileJava {

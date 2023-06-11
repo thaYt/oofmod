@@ -10,16 +10,23 @@ import java.io.IOException;
 import static javax.sound.sampled.AudioFormat.Encoding.PCM_SIGNED;
 
 public class SoundManager {
-    // yes i stole this code from stackoverflow. i'm not an audio expert okay i don't want to think
-    // also volume idk
     public static void playSound(File file, float volume) {
-        try (final AudioInputStream in = AudioSystem.getAudioInputStream(file)) {
+        try {
+            AudioInputStream in = AudioSystem.getAudioInputStream(file);
+//            if (file.getName().endsWith(".mp3")) {
+//                // this is probably a really shit way of doing it
+//                InputStream stream = new ByteArrayInputStream(Converter.convertFrom(Files.readAllBytes(file.toPath())).toByteArray());
+//                in = AudioSystem.getAudioInputStream(stream);
+//            }
             final AudioFormat outFormat = getOutFormat(in.getFormat());
             final Info info = new Info(SourceDataLine.class);
 
             try (final SourceDataLine line = (SourceDataLine) AudioSystem.getLine(info)) {
                 if (line != null) {
                     line.open(outFormat);
+                    // volume modification
+                    FloatControl gainControl = (FloatControl) line.getControl(FloatControl.Type.MASTER_GAIN);
+                    gainControl.setValue(volume / 100);
                     line.start();
                     stream(AudioSystem.getAudioInputStream(outFormat, in), line);
                     line.drain();
@@ -29,7 +36,6 @@ public class SoundManager {
 
         } catch (UnsupportedAudioFileException | LineUnavailableException | IOException e) {
             Chat.sendFormattedChatMessage("&cAn error occurred while trying to play a sound!");
-            e.printStackTrace();
             Chat.sendFormattedChatMessage(e.getMessage());
         }
     }
@@ -52,25 +58,30 @@ public class SoundManager {
      * @return time in seconds
      */
     public static double getDuration(File file) {
-//        if (file.getName().endsWith(".wav")) {
         try {
+//            if (file.getName().endsWith(".mp3")) {
+//                // this is probably a really shit way of doing it
+//                InputStream stream = new ByteArrayInputStream(Converter.convertFrom(Files.readAllBytes(file.toPath())).toByteArray());
+//                AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(stream);
+//                AudioFormat format = audioInputStream.getFormat();
+//                long frames = audioInputStream.getFrameLength();
+//                return (frames + 0.0) / format.getFrameRate();
+//            }
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
             AudioFormat format = audioInputStream.getFormat();
             long frames = audioInputStream.getFrameLength();
             return (frames + 0.0) / format.getFrameRate();
-        } catch (Exception e) {
+        } catch (UnsupportedAudioFileException | IOException e) {
             Chat.sendFormattedChatMessage("&ccould not get duration of " + file.getName());
-            e.printStackTrace();
             Chat.sendFormattedChatMessage(e.getMessage());
+            e.printStackTrace();
         }
-//        } else if (file.getName().endsWith(".mp3")) {
-//            try {
-//                return new Mp3File(file).getLengthInSeconds();
-//            } catch (IOException | UnsupportedTagException | InvalidDataException e) {
-//                Chat.sendFormattedChatMessage("&ccould not get duration of " + file.getName());
-//                e.printStackTrace();
-//                Chat.sendFormattedChatMessage(e.getMessage());
-//            }
+//        try {
+//            return new Mp3File(file).getLengthInSeconds();
+//        } catch (IOException | UnsupportedTagException | InvalidDataException e) {
+//            Chat.sendFormattedChatMessage("&ccould not get duration of " + file.getName());
+//            e.printStackTrace();
+//            Chat.sendFormattedChatMessage(e.getMessage());
 //        }
         return 0;
     }

@@ -20,8 +20,7 @@ public class DeathChatEvent extends Event {
         String line = Chat.cleanMessage(event.getMessage().getUnformattedText());
         if (line.split(" ").length == 0) return;
         Matcher killMessageMatcher = Chat.killPattern.matcher(line);
-        if (killMessageMatcher.find() && Objects.equals(killMessageMatcher.group("username"), Minecraft.getMinecraft().thePlayer.getName())) {
+        if (killMessageMatcher.find() && Objects.equals(killMessageMatcher.group("username"), Minecraft.getMinecraft().thePlayer.getName()))
             new Thread(() -> SoundManager.playSound(new File(OofMod.storageManager.getActiveSound()), OofMod.storageManager.getVolume())).start();
-        }
     }
 }
