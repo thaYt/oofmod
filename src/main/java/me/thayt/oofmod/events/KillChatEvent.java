@@ -1,7 +1,6 @@
 package me.thayt.oofmod.events;
 
 import me.thayt.oofmod.OofMod;
-import me.thayt.oofmod.managers.SoundManager;
 import me.thayt.oofmod.utils.Chat;
 import me.thayt.oofmod.utils.Event;
 import net.minecraft.client.Minecraft;
@@ -22,7 +21,7 @@ public class KillChatEvent extends Event {
         Matcher killMessageMatcher = Chat.killPattern.matcher(line);
         Matcher bedBreakMatcher = Chat.bedPattern.matcher(line);
         if (killMessageMatcher.find() && !bedBreakMatcher.find() && Objects.equals(killMessageMatcher.group("killer"), Minecraft.getMinecraft().thePlayer.getName()))
-            new Thread(() -> SoundManager.playSound(new File(OofMod.storageManager.getActiveSound()), OofMod.storageManager.getVolume())).start();
+            new Thread(() -> OofMod.soundManager.playSound(new File(OofMod.storageManager.getActiveSound()), OofMod.storageManager.getVolume())).start();
     }
 }
 

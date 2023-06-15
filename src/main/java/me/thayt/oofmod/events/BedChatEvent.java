@@ -1,7 +1,6 @@
 package me.thayt.oofmod.events;
 
 import me.thayt.oofmod.OofMod;
-import me.thayt.oofmod.managers.SoundManager;
 import me.thayt.oofmod.utils.Chat;
 import me.thayt.oofmod.utils.Event;
 import net.minecraft.client.Minecraft;
@@ -21,6 +20,6 @@ public class BedChatEvent extends Event {
         if (line.split(" ").length == 0) return;
         Matcher bedBreakMatcher = Chat.bedPattern.matcher(line);
         if (bedBreakMatcher.find() && Objects.equals(bedBreakMatcher.group("username"), Minecraft.getMinecraft().thePlayer.getName()))
-            new Thread(() -> SoundManager.playSound(new File(OofMod.storageManager.getActiveSound()), OofMod.storageManager.getVolume())).start();
+            new Thread(() -> OofMod.soundManager.playSound(new File(OofMod.storageManager.getActiveSound()), OofMod.storageManager.getVolume())).start();
     }
 }

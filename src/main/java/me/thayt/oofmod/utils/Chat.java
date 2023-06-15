@@ -3,6 +3,7 @@ package me.thayt.oofmod.utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IChatComponent;
 
 import java.util.regex.Pattern;
 
@@ -39,6 +40,10 @@ public class Chat {
 
     public static void sendFormattedChatMessage(String str) {
         Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(color(str)));
+    }
+
+    public static void sendRaw(IChatComponent iChatComponent) {
+        Minecraft.getMinecraft().thePlayer.addChatMessage(iChatComponent);
     }
 
     public static String cleanMessage(String message) {

@@ -1,6 +1,5 @@
 package me.thayt.oofmod.managers;
 
-
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -37,26 +36,28 @@ public class StorageManager {
 
     private void initConfig() {
         try {
-            Files.write(configFile.toPath(), this.getClass().getClassLoader().getResourceAsStream("defaultConfig.txt").readAllBytes(), StandardOpenOption.CREATE, StandardOpenOption.WRITE);
+            Files.write(configFile.toPath(),
+                    this.getClass().getClassLoader().getResourceAsStream("defaultConfig.txt").readAllBytes(),
+                    StandardOpenOption.CREATE, StandardOpenOption.WRITE);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.out.println("the jar is fucked");
         }
+        // ?????????????????????????????????????????????????????????????????????????????????????
+        // just fucking did catch (Exception e) { throw new Exception(e); } i'm
+        // braindead
     }
 
     private void parseConfig() {
         try {
             String cfg = new String(Files.readAllBytes(configFile.toPath()));
             // if you have a , in your directory i feel bad for you
-            for (int i = 0; i < cfg.split(",").length; i++) {
-                String line = cfg.split(",")[i].strip();
-                switch (i) {
-                    case 0 -> activeSound = line;
-                    case 1 -> volume = Float.parseFloat(line);
-                    case 2 -> bedBreakToggle = Boolean.parseBoolean(line);
-                    case 3 -> deathToggle = Boolean.parseBoolean(line);
-                    case 4 -> killToggle = Boolean.parseBoolean(line);
-                }
-            }
+            // also why the FUCK was i using a for loop there im so stupid
+            String[] lines = cfg.strip().split(",");
+            activeSound = lines[0];
+            volume = Float.parseFloat(lines[1]);
+            bedBreakToggle = Boolean.parseBoolean(lines[2]);
+            deathToggle = Boolean.parseBoolean(lines[3]);
+            killToggle = Boolean.parseBoolean(lines[4]);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -64,27 +65,31 @@ public class StorageManager {
 
     public Collection<File> getAllSounds() {
         File dir = getSoundFolder().toFile();
-        return FileUtils.listFiles(dir, new String[]{"mp3", "wav"}, false);
-//        return FileUtils.listFiles(dir, new String[]{"wav"}, false);
+        return FileUtils.listFiles(dir, new String[] { "mp3", "wav" }, false);
     }
 
     private Path getConfigFolder() {
         File dir = Paths.get(System.getProperty("user.home"), ".weave", "oofmod").toFile();
-        if (dir.exists() && !dir.isDirectory()) dir.delete();
-        if (!dir.exists()) dir.mkdirs();
+        if (dir.exists() && !dir.isDirectory())
+            dir.delete();
+        if (!dir.exists())
+            dir.mkdirs();
         return dir.toPath();
     }
 
     public Path getSoundFolder() {
         File dir = Paths.get(System.getProperty("user.home"), ".weave", "oofmod", "sounds").toFile();
-        if (dir.exists() && !dir.isDirectory()) dir.delete();
-        if (!dir.exists()) dir.mkdirs();
+        if (dir.exists() && !dir.isDirectory())
+            dir.delete();
+        if (!dir.exists())
+            dir.mkdirs();
         return dir.toPath();
     }
 
     public void writeDefaultSound() {
         try {
-            Files.write(Paths.get(getSoundFolder() + "/oof.wav"), this.getClass().getClassLoader().getResourceAsStream("oof.wav").readAllBytes());
+            Files.write(Paths.get(getSoundFolder() + "/oof.wav"),
+                    this.getClass().getClassLoader().getResourceAsStream("oof.wav").readAllBytes());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -102,7 +107,8 @@ public class StorageManager {
                 } else {
                     sb.append(line);
                 }
-                if (i != 4) sb.append(",");
+                if (i != 4)
+                    sb.append(",");
             }
             deleteConfig();
             Files.writeString(configFile.toPath(), sb.toString(), StandardOpenOption.CREATE);
@@ -123,7 +129,8 @@ public class StorageManager {
                 } else {
                     sb.append(line);
                 }
-                if (i != 4) sb.append(",");
+                if (i != 4)
+                    sb.append(",");
             }
             deleteConfig();
             Files.writeString(configFile.toPath(), sb.toString(), StandardOpenOption.CREATE);
@@ -131,7 +138,6 @@ public class StorageManager {
             throw new RuntimeException(e);
         }
     }
-
 
     public void setBedBreakToggle(Boolean b) {
         bedBreakToggle = b;
@@ -145,7 +151,8 @@ public class StorageManager {
                 } else {
                     sb.append(line);
                 }
-                if (i != 4) sb.append(",");
+                if (i != 4)
+                    sb.append(",");
             }
             deleteConfig();
             Files.writeString(configFile.toPath(), sb.toString(), StandardOpenOption.CREATE);
@@ -166,7 +173,8 @@ public class StorageManager {
                 } else {
                     sb.append(line);
                 }
-                if (i != 4) sb.append(",");
+                if (i != 4)
+                    sb.append(",");
             }
             deleteConfig();
             Files.writeString(configFile.toPath(), sb.toString(), StandardOpenOption.CREATE);
@@ -187,7 +195,8 @@ public class StorageManager {
                 } else {
                     sb.append(line);
                 }
-                if (i != 4) sb.append(",");
+                if (i != 4)
+                    sb.append(",");
             }
             deleteConfig();
             Files.writeString(configFile.toPath(), sb.toString(), StandardOpenOption.CREATE);
@@ -201,7 +210,8 @@ public class StorageManager {
     }
 
     public String getActiveSound() {
-        if (!new File(activeSound).exists()) activeSound = "";
+        if (!new File(activeSound).exists())
+            activeSound = "";
         return activeSound;
     }
 
