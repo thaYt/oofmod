@@ -119,10 +119,12 @@ public class OofCommand extends Command {
             }
             case "toggle", "t" -> {
                 if (args.length < 2) {
-                    Chat.sendFormattedChatMessage(oof + " please send an argument after 'toggle'. Valid arguments:");
+                    Chat.sendFormattedChatMessage(
+                            oof + " please send a valid argument after 'toggle'. Valid arguments:");
                     Chat.sendFormattedChatMessage("    &d&lbeds, bed, b&7 - beds");
                     Chat.sendFormattedChatMessage("    &d&ldeaths, death, d&7 - deaths");
                     Chat.sendFormattedChatMessage("    &d&lkills, kill, k&7 - kills");
+                    Chat.sendFormattedChatMessage("    &d&lall, a&7 - toggles all");
                     return;
                 }
                 switch (args[1]) {
