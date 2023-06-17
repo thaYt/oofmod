@@ -68,13 +68,15 @@ public class OofCommand extends Command {
                     Chat.sendFormattedChatMessage(oof + " current sounds: ");
                     OofMod.storageManager.getAllSounds().forEach(file -> {
                         try {
-                            String text = file.getName() + " - "
+                            String text = "&7" + file.getName() + " -&d "
                                     + new DecimalFormat("0.00").format(soundManager.getDuration(file)) + "s";
+                            if (!soundManager.is16Bit(file))
+                                text += "&c - will not support volume";
                             ClickEvent clickEvent = new ClickEvent(ClickEvent.Action.RUN_COMMAND,
                                     "/oof test " + file.getName());
                             HoverEvent hoverEvent = new HoverEvent(HoverEvent.Action.SHOW_TEXT,
                                     new ChatComponentText("/oof test " + file.getName()));
-                            Chat.sendRaw(new ChatComponentText(text).setChatStyle(
+                            Chat.sendRaw(new ChatComponentText(Chat.color(text)).setChatStyle(
                                     new ChatStyle().setChatClickEvent(clickEvent).setChatHoverEvent(hoverEvent)));
                         } catch (Exception e) {
                             Chat.sendFormattedChatMessage(file.getName());

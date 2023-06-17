@@ -29,13 +29,17 @@ public class SoundManager {
             try (final SourceDataLine line = (SourceDataLine) AudioSystem.getLine(info)) {
                 if (line != null) {
                     line.open(outFormat);
-                    // volume modification
-                    // doesn't work, at least on windows
-                    FloatControl gainControl = (FloatControl) line.getControl(FloatControl.Type.MASTER_GAIN);
-                    gainControl.setValue(volume / 100);
                     line.start();
                     sounds.add(line);
-                    stream(AudioSystem.getAudioInputStream(outFormat, in), line);
+                    if (!is16Bit(file)) {
+                        // mp3
+                        stream(AudioSystem.getAudioInputStream(outFormat, in), line);
+                    } else {
+                        int bitsPerSample = outFormat.getSampleSizeInBits();
+                        float volumeFactor = (float) Math.pow(2, bitsPerSample - 16) * (volume / 100f);
+                        // wav
+                        stream(AudioSystem.getAudioInputStream(outFormat, in), line, volumeFactor);
+                    }
                     sounds.remove(line);
                     line.drain();
                     line.stop();
@@ -64,6 +68,54 @@ public class SoundManager {
         }
     }
 
+    // ridiculously overcomplicated code to make sure literally fucking *anything*
+    // works & no i don't understand it
+    private void stream(AudioInputStream in, SourceDataLine line, float volumeFactor)
+            throws IOException {
+        final byte[] buffer = new byte[65536];
+        final int sampleSizeInBytes = in.getFormat().getSampleSizeInBits() / 8;
+        for (int n = 0; n != -1; n = in.read(buffer, 0, buffer.length)) {
+            if (stop)
+                return;
+            for (int i = 0; i < n; i += sampleSizeInBytes) {
+                short sample = 0;
+                if (sampleSizeInBytes == 2) {
+                    // 16-bit sample
+                    if (in.getFormat().isBigEndian()) {
+                        sample = (short) ((buffer[i] & 0xff) << 8 | (buffer[i + 1] & 0xff));
+                    } else {
+                        sample = (short) ((buffer[i + 1] & 0xff) << 8 | (buffer[i] & 0xff));
+                    }
+                } else if (sampleSizeInBytes == 1) {
+                    // 8-bit sample
+                    sample = (short) (buffer[i] & 0xff);
+                }
+                sample = (short) (sample * volumeFactor);
+                if (sampleSizeInBytes == 2) {
+                    // 16-bit sample
+                    if (in.getFormat().isBigEndian()) {
+                        buffer[i] = (byte) ((sample >> 8) & 0xff);
+                        buffer[i + 1] = (byte) (sample & 0xff);
+                    } else {
+                        buffer[i] = (byte) (sample & 0xff);
+                        buffer[i + 1] = (byte) ((sample >> 8) & 0xff);
+                    }
+                } else if (sampleSizeInBytes == 1) {
+                    // 8-bit sample
+                    buffer[i] = (byte) (sample & 0xff);
+                }
+            }
+            line.write(buffer, 0, n);
+        }
+    }
+
+    public boolean is16Bit(File file) throws IOException, UnsupportedAudioFileException {
+        AudioInputStream in = AudioSystem.getAudioInputStream(file);
+        AudioFormat format = in.getFormat();
+        in.close();
+        return format.getSampleSizeInBits() == 16;
+    }
+
     /**
      * @return time in seconds
      */
@@ -82,6 +134,7 @@ public class SoundManager {
                 AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
                 AudioFormat format = audioInputStream.getFormat();
                 long frames = audioInputStream.getFrameLength();
+                audioInputStream.close();
                 return (frames + 0.0) / format.getFrameRate();
             } catch (UnsupportedAudioFileException | IOException e) {
                 Chat.sendFormattedChatMessage("&ccould not get duration of " + file.getName());
