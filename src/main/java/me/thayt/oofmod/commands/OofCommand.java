@@ -12,8 +12,6 @@ import java.io.File;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 
-import static me.thayt.oofmod.OofMod.soundManager;
-
 public class OofCommand extends Command {
     public OofCommand() {
         super("oofmod", "oof");
@@ -36,7 +34,7 @@ public class OofCommand extends Command {
         }
         switch (args[0]) {
             case "stop" -> {
-                soundManager.stopAll();
+                OofMod.soundManager.stopAll();
                 Chat.sendFormattedChatMessage(oof + " stopped all sounds");
             }
             case "test" -> {
@@ -57,7 +55,6 @@ public class OofCommand extends Command {
                 Chat.sendFormattedChatMessage(String.format("&7Playing %s", matchingSound.getName()));
                 new Thread(() -> OofMod.soundManager.playSound(matchingSound, OofMod.storageManager.getVolume()))
                         .start();
-                OofMod.storageManager.setActiveSound(matchingSound.getPath());
             }
             case "default", "d" -> {
                 OofMod.storageManager.writeDefaultSound();
@@ -69,8 +66,8 @@ public class OofCommand extends Command {
                     OofMod.storageManager.getAllSounds().forEach(file -> {
                         try {
                             String text = "&7" + file.getName() + " -&d "
-                                    + new DecimalFormat("0.00").format(soundManager.getDuration(file)) + "s";
-                            if (!soundManager.is16Bit(file))
+                                    + new DecimalFormat("0.00").format(OofMod.soundManager.getDuration(file)) + "s";
+                            if (!OofMod.soundManager.is16Bit(file))
                                 text += "&c - will not support volume";
                             ClickEvent clickEvent = new ClickEvent(ClickEvent.Action.RUN_COMMAND,
                                     "/oof test " + file.getName());

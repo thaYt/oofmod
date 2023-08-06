@@ -1,14 +1,12 @@
 package me.thayt.oofmod.managers;
 
+import com.mpatric.mp3agic.InvalidDataException;
+import com.mpatric.mp3agic.Mp3File;
+import com.mpatric.mp3agic.UnsupportedTagException;
 import me.thayt.oofmod.utils.Chat;
 
 import javax.sound.sampled.*;
 import javax.sound.sampled.Line.Info;
-
-import com.mpatric.mp3agic.InvalidDataException;
-import com.mpatric.mp3agic.Mp3File;
-import com.mpatric.mp3agic.UnsupportedTagException;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,7 +14,7 @@ import java.util.ArrayList;
 import static javax.sound.sampled.AudioFormat.Encoding.PCM_SIGNED;
 
 public class SoundManager {
-    private ArrayList<SourceDataLine> sounds = new ArrayList<>();
+    private final ArrayList<SourceDataLine> sounds = new ArrayList<>();
     private boolean stop = false;
 
     public void playSound(File file, float volume) {
@@ -46,7 +44,7 @@ public class SoundManager {
                 }
             }
 
-        } catch (UnsupportedAudioFileException | LineUnavailableException | IOException e) {
+        } catch (Exception e) {
             Chat.sendFormattedChatMessage("&cAn error occurred while trying to play a sound!");
             Chat.sendFormattedChatMessage(e.getMessage());
         }
@@ -149,7 +147,7 @@ public class SoundManager {
         stop = true;
         new Thread(() -> {
             while (stop)
-                if (sounds.size() == 0)
+                if (sounds.isEmpty())
                     stop = false;
         }).start();
     }
