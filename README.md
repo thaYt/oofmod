@@ -2,7 +2,9 @@
 
 ## usage
 
-`/oof <cmd>` or `/oofmod <cmd>`
+see USAGE.md
+
+---
 
 maybe gui when a library comes out
 
